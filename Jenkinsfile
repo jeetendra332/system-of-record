@@ -37,21 +37,19 @@ pipeline {
                 bat 'mvn package -DskipTests'
             }
         }
-
-
-post {
-    success {
-        echo 'System of Record pipeline completed successfully!'
     }
 
-    failure {
-        echo 'System of Record pipeline failed. Check the Console Output.'
-    }
+    post {
+        success {
+            echo 'System of Record pipeline completed successfully!'
+        }
 
-    always {
-        echo 'Pipeline execution finished.'
-    }
-}
+        failure {
+            echo 'System of Record pipeline failed. Check the Console Output.'
+        }
 
+        always {
+            echo 'Pipeline execution finished.'
+        }
     }
 }
