@@ -36,6 +36,12 @@ pipeline {
             steps {
                 bat 'mvn package -DskipTests'
             }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'target/*.jar',
+                                     fingerprint: true
+                }
+            }
         }
     }
 
