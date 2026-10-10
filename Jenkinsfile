@@ -44,11 +44,13 @@ pipeline {
             }
         }
 
-        stage('Docker Check') {
-            steps {
-                bat 'docker version'
-            }
-        }
+
+stage('Docker Check') {
+    steps {
+        bat '"C:\\Users\\jeetu\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" version'
+    }
+}
+
     }
 
     post {
