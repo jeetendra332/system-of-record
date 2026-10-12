@@ -65,7 +65,7 @@ pipeline {
                 )]) {
                     bat '''
                         @echo off
-                        echo %DOCKERHUB_PASSWORD% | "C:\\Users\\jeetu\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" login -u "%DOCKERHUB_USERNAME%" --password-stdin
+                        powershell -NoProfile -ExecutionPolicy Bypass -Command "$env:DOCKERHUB_PASSWORD | & 'C:\Users\jeetu\AppData\Local\Programs\DockerDesktop\resources\bin\docker.exe' login -u $env:DOCKERHUB_USERNAME --password-stdin"
                         if errorlevel 1 exit /b 1
 
                         "C:\\Users\\jeetu\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" tag system-of-record:1.0 jeetendrajs/system-of-record:1.0
