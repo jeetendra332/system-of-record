@@ -11,14 +11,6 @@ pipeline {
     }
 
     stages {
-
-
-          stage('Check Docker Access') {
-             steps {
-                  bat '"C:/Users/jeetu/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe" ps'
-             }
-        }
-
         stage('Show Build Information') {
             steps {
                 echo "Job Name: ${env.JOB_NAME}"
@@ -94,15 +86,34 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to Docker') {
+            steps {
+                bat '''
+                    @echo off
+                    set "DOCKER=C:/Users/jeetu/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe"
+
+                    "%DOCKER%" pull jeetendrajs/system-of-record:%BUILD_NUMBER%
+                    if errorlevel 1 exit /b 1
+
+                    "%DOCKER%" rm -f sor-app-dockerhub-v3 >nul 2>&1
+
+                    "%DOCKER%" run -d --name sor-app-dockerhub-v3 -p 8082:8081 -e JWT_SECRET=VGhpc0lzQVNlY3JldEtleUZvckRldk9ubHlOb3RGb3JQcm9kdWN0aW9uMTIzNDU2Nzg5MA== -e "SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/sor_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true" jeetendrajs/system-of-record:%BUILD_NUMBER%
+                    if errorlevel 1 exit /b 1
+
+                    echo Deployment command completed.
+                '''
+            }
+        }
     }
 
     post {
         success {
-            echo 'System of Record pipeline completed successfully!'
+            echo 'System of Record pipeline and deployment completed successfully!'
         }
 
         failure {
-            echo 'System of Record pipeline failed. Check the Console Output.'
+            echo 'Pipeline or deployment failed. Check the Console Output.'
         }
 
         always {
