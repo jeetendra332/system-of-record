@@ -45,11 +45,19 @@ pipeline {
         }
 
 
-stage('Docker Check') {
-    steps {
-        bat '"C:\\Users\\jeetu\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" version'
-    }
-}
+        stage('Docker Check') {
+            steps {
+                bat '"C:\\Users\\jeetu\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" version'
+            }
+        }
+
+
+        stage('Docker Image Build') {
+             steps {
+              bat '"C:\\Users\\jeetu\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t system-of-record:1.0 .'
+              }
+        }
+
 
     }
 

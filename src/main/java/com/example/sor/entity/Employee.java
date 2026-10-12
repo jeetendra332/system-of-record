@@ -1,24 +1,44 @@
+
 package com.example.sor.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "employees")
+@Table(
+        name = "employees",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_employee_code",
+                        columnNames = "employee_code"
+                ),
+                @UniqueConstraint(
+                        name = "uk_employee_email",
+                        columnNames = "email"
+                )
+        }
+)
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Employee code is required")
+    @Column(name = "employee_code", nullable = false, unique = true)
     private String employeeCode;
 
-    @Column(nullable = false)
+    @NotBlank(message = "First name is required")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Last name is required")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @NotBlank(message = "Email is required")
+    @Email(message = "Enter a valid email")
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -26,14 +46,19 @@ public class Employee {
 
     private String designation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
     private Department department;
 
-    // Getters and Setters
+    public Employee() {
+    }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmployeeCode() {
