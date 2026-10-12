@@ -11,6 +11,14 @@ pipeline {
     }
 
     stages {
+
+
+          stage('Check Docker Access') {
+             steps {
+                  bat '"C:/Users/jeetu/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe" ps'
+             }
+        }
+
         stage('Show Build Information') {
             steps {
                 echo "Job Name: ${env.JOB_NAME}"
@@ -102,4 +110,3 @@ pipeline {
         }
     }
 }
-    
