@@ -65,17 +65,9 @@ pipeline {
                 )]) {
                     bat '''
                         @echo off
-                        "C:\\Users\\jeetu\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" login -u %DOCKERHUB_USERNAME% --password-stdin
-                    '''
-                }
+                        echo %DOCKERHUB_PASSWORD% | "C:\\Users\\jeetu\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" login -u "%DOCKERHUB_USERNAME%" --password-stdin
+                        if errorlevel 1 exit /b 1
 
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-credentials',
-                    usernameVariable: 'DOCKERHUB_USERNAME',
-                    passwordVariable: 'DOCKERHUB_PASSWORD'
-                )]) {
-                    bat '''
-                        @echo off
                         "C:\\Users\\jeetu\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" tag system-of-record:1.0 jeetendrajs/system-of-record:1.0
                         if errorlevel 1 exit /b 1
 
